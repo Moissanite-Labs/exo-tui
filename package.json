@@ -3,7 +3,20 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "engines": { "bun": ">=1.3.14" },
-  "scripts": { "start": "bun src/index.ts --mock", "plain": "bun src/index.ts --mock --plain", "test": "bun test" },
-  "dependencies": { "@opentui/core": "0.7.0" }
+  "engines": {
+    "bun": ">=1.3.14"
+  },
+  "scripts": {
+    "start": "bun src/index.ts --mock",
+    "plain": "bun src/index.ts --mock --plain",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@opentui/core": "0.7.0"
+  },
+  "devDependencies": {
+    "@types/bun": "1.4.1",
+    "typescript": "5.9.3"
+  }
 }

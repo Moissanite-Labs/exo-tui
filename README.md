@@ -1,17 +1,18 @@
 # exo-tui
 Experimental alternative TUI for Exo, based off OpenTUI by @anomalyco
 
-This is an early, **mock-only** TypeScript frontend experiment. It does not connect to Exo, launch the engine, call a provider, or perform an approval action. The existing Python engine and `python -m exo.cli serve` remain separate. The mock generates two streamed replies and a queue of scripted approval requests after the first input; the first answer to the first request is deliberately rejected. The mock includes replay for disconnect testing, not a network transport.
+This is an early, **mock-only** TypeScript frontend experiment. It does not connect to Exo, launch the engine, call a provider, or perform an approval action. The existing Python engine and `python -m exo.cli serve` remain separate. Each input produces a streamed mock reply; the first input also starts a queue of scripted approval requests; the first answer to the first request is deliberately rejected. The mock includes replay for disconnect testing, not a network transport.
 
 ## Try it
 
 Requires Bun 1.3.14 or newer and the dependencies, including OpenTUI's matching optional native package. `@opentui/core` is pinned to 0.7.0. On native Windows arm64 OpenTUI requires Bun 1.4.0 or later. OpenTUI also documents Node 26.4+ with experimental FFI, but this project currently uses Bun for running and testing. See [OpenTUI runtime support](https://opentui.com/docs/getting-started/runtime-support/).
 
 ```sh
-bun install
+bun install --frozen-lockfile
 bun run start                    # explicit --mock is in this script
 bun run plain                    # noninteractive fixed fixture, safe for pipes
 bun test
+bun run typecheck
 ```
 
 Interactive mode requires a TTY and explicit `--mock`. Tab switches between composer and transcript. When the transcript has focus use arrows, Page Up/Down, Home and End. Ctrl+F focuses the approval controls without discarding the draft. `o` answers once; `d`, Enter denies; `a`, Enter allows always, if the request offers the option. Esc cancels a pending confirmation. Ctrl+Q or Ctrl+C exits. The focus label is visible. The plain fixture is not an interactive client or a screen-reader equivalent. Screen-reader support and terminal accessibility have not been established.
@@ -26,8 +27,8 @@ This is **not a compatible Exo client yet**: the mock's session, messages, order
 
 ## Verification and contribution
 
-`bun test` covers ordered replay, duplicate events, Unicode strings, repeated inputs, distinct approval IDs, rejection and matching resolution. Before treating the interface as usable, install the pinned dependency and run renderer and terminal tests for streaming while scrolled up, resize, Unicode display cells, focus and repeated input, shutdown and restoration, and stderr ownership. These native-renderer checks have **not** been run in the initial constrained environment. No accessibility claim is made. Please keep changes small and mock-only until the protocol transport has separate integration tests. Do not add live actions or provider calls to fixtures.
+`bun test` covers ordered replay, duplicate events, Unicode strings, repeated inputs, distinct approval IDs, rejection and matching resolution. Native OpenTUI renderer tests cover keyboard focus and draft preservation, scrolling while streaming, resize, Unicode display, matching approval confirmation and cleanup. On POSIX, a Python 3 pseudo-terminal test also checks terminal mode restoration, alternate-screen exit and an empty stderr during a mock interaction; Windows skips that test. These checks ran on macOS arm64 with Bun 1.4.2. They do not establish behavior on other terminals or platforms, screen-reader support, or stderr handling for future subprocesses and transports. No accessibility claim is made. Please keep changes small and mock-only until the protocol transport has separate integration tests. Do not add live actions or provider calls to fixtures.
 
-Roadmap: validate the native UI and fallback; implement and test a v1 transport with replay and server-instance handling; reconcile pending approvals against the core; then add session selection and richer transcript events. Preserve Exo's existing CLI and service entry points.
+Roadmap: broaden terminal and accessibility testing; implement and test a v1 transport with replay and server-instance handling; reconcile pending approvals against the core; then add session selection and richer transcript events. Preserve Exo's existing CLI and service entry points.
 
 OpenTUI is an independent project by Anomaly and is [MIT licensed](https://github.com/anomalyco/opentui/blob/main/LICENSE). This repository currently has no project license; dependency attribution does not grant one. Contributions should include tests and describe any protocol or terminal assumptions.
