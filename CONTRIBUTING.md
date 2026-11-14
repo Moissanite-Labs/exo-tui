@@ -1,6 +1,6 @@
 # Contributing
 
-Moissanite Labs repositories follow the lab's GitHub operating procedure in [eth0s `sops/github.md`](https://github.com/Moissanite-Labs/eth0s/blob/main/sops/github.md) (internal, team only): every pull request links the issue that states the problem, work lands through reviewed pull requests rather than direct pushes to `main`, and the author of a code change does not merge it.
+Moissanite Labs repositories follow the lab's GitHub operating procedure in [eth0s `sops/github.md`](https://github.com/Moissanite-Labs/eth0s/blob/main/sops/github.md) (internal, team only): open an issue first when none exists, every pull request links the issue that states the problem, that issue links back to the implementing pull request, work lands through reviewed pull requests rather than direct pushes to `main`, and the author of a code change does not merge it.
 
 For this repository:
 

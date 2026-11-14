@@ -8,9 +8,9 @@ Exo's core speaks one protocol, and its terminal and web clients are both drawn 
 
 **The core is the authority.** The client displays state and sends intents. An approval card closes only when the core resolves the matching request, and a successful send of an answer counts as receipt rather than closure. A refused answer is shown as refused.
 
-**Approvals are bound and fail closed.** Exo ties every outward approval to the exact text, target and arguments. The client keeps that discipline at the keyboard: an answer names its request ID and binding, a confirmation belongs to one request, and any ambiguity about focus, modifiers or which request sits at the head resolves toward no answer at all. The Phase 1 work in the [roadmap](ROADMAP.md) makes this hold under the specific failures the first review found.
+**Approvals are bound and fail closed.** Exo ties every outward approval to the exact text, target and arguments. The client already sends answers that name the request ID and binding, ties a confirmation to one request, and closes a card only when the matching resolution arrives. Making the keyboard fail closed, so that any ambiguity about focus, modifiers or which request sits at the head resolves toward no answer at all, is the Phase 1 target in the [roadmap](ROADMAP.md).
 
-**State is a replayable log.** Events carry a global `seq`, the client applies them in order, ignores duplicates, and resubscribes from its last `seq` after a disconnect. The mock already exercises replay, so the live transport inherits a state model that has been tested against reordering and reconnection.
+**State is a replayable log.** Events carry a global `seq`, the client applies them in order, ignores duplicates, and resubscribes from its last `seq` after a disconnect. The tests cover those rules as they stand: duplicate sequences are ignored, gaps advance the cursor, and a disconnect followed by `reconnect()` replays from the last sequence.
 
 **The terminal is left as it was found.** Alternate screen, raw mode and the cursor are restored on exit, and diagnostics stay off the live frame. The pseudo-terminal test checks this on POSIX.
 
